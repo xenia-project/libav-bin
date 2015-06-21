@@ -1,0 +1,24 @@
+ libavcodec/wmaprodec.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/wmaprodec.c b/libavcodec/wmaprodec.c
+index 184ae99..5fba8d8 100644
+--- a/libavcodec/wmaprodec.c
++++ b/libavcodec/wmaprodec.c
+@@ -310,7 +310,7 @@ static av_cold int decode_init(AVCodecContext *avctx)
+     s->log2_frame_size = av_log2(avctx->block_align) + 4;
+ 
+     /** frame info */
+-    s->skip_frame  = 1; /* skip first frame */
++    s->skip_frame  = 0; /* don't skip first frame */
+     s->packet_loss = 1;
+     s->len_prefix  = (s->decode_flags & 0x40);
+ 
+@@ -1544,6 +1544,7 @@ static int decode_packet(AVCodecContext *avctx, void *data,
+         num_bits_prev_frame = get_bits(gb, s->log2_frame_size);
+         ff_dlog(avctx, "packet[%d]: nbpf %x\n", avctx->frame_number,
+                 num_bits_prev_frame);
++        skip_bits(gb, 11);
+ 
+         /** check for packet loss */
+         if (!s->packet_loss &&
